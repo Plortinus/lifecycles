@@ -1,2 +1,2 @@
 # lifecycles
-How to show lifecycles?
+A program test `DOMContentloaded`
