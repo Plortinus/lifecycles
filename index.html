@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <img id="img" src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png">
+  <div class="controls">
+    <button id="reload" type="button">Reload</button>
+  </div>
+  
+  <div class="event-log">
+    <label>Event log:</label>
+    <textarea readonly class="event-log-contents" rows="8" cols="50"></textarea>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js"></script>
+  <script>
+    console.log("js loaded DOMContentLoaded Library loaded, inline script executed");
+  </script>
+  <script>
+    // 绑定事件防在这里是因为需要等DOM加载完毕
+    const log = document.querySelector('.event-log-contents');
+    const reload = document.querySelector('#reload');
+
+    reload.addEventListener('click', () => {
+      log.textContent = '';
+      window.setTimeout(() => {
+        window.location.reload(true);
+      }, 200);
+    });
+
+    window.addEventListener('load', (event) => {
+      // load
+      console.log(`window load style ${window.getComputedStyle(document.body).marginTop}`)
+      const img = document.getElementById('img')
+      log.textContent = `${log.textContent}window load: Image size: ${img.offsetWidth}x${img.offsetHeight} \n`;
+    });
+
+    document.addEventListener('readystatechange', (event) => {
+      log.textContent = log.textContent + `document readystate: ${document.readyState}\n`;
+    });
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      console.log(`DOMContentLoaded style ${window.getComputedStyle(document.body).marginTop}`)
+      const img = document.getElementById('img')
+      log.textContent = `${log.textContent}document DOMContentLoaded: Image size: ${img.offsetWidth}x${img.offsetHeight} \n`;
+    });
+    // 在样式表加载完成之前，脚本都不会执行。这个函数的执行在DOMContentLoaded之前，猜测是放在微任务队列队尾
+    console.log(`css DOMContentLoaded style ${window.getComputedStyle(document.body).marginTop}`);
+  </script>
+</body>
+</html>
